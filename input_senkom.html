@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INPUT LAPORAN POSKO - SENKOM BANTEN 2027</title>
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: #131c31;
+      --bg-input: #1e293b;
+      --border: #334155;
+      --gold: #f59e0b;
+      --gold-light: #fbbf24;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      padding: 0 1rem 2rem;
+    }
+
+    /* AREA HEADER TETAP (STICKY) SAAT DI-SCROLL */
+    .sticky-header-area {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(180deg, #090d16 88%, rgba(9, 13, 22, 0.94) 96%, rgba(9, 13, 22, 0) 100%);
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .top-header {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+    }
+
+    /* PITA ATAS TANGGAL & SYSTEM BY_Yefry.ZA */
+    .header-credit-strip {
+      background: rgba(245, 158, 11, 0.14);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 5px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .live-date-display {
+      color: #e2e8f0;
+      font-weight: 700;
+    }
+
+    .credit-badge {
+      color: var(--gold-light);
+      background: rgba(9, 13, 22, 0.65);
+      padding: 2px 9px;
+      border-radius: 99px;
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      letter-spacing: 0.8px;
+    }
+
+    /* ISI UTAMA HEADER (LOGO + JUDUL) */
+    .header-main-row {
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .logo-input {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 4px;
+      border-radius: 12px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+      flex-shrink: 0;
+    }
+
+    .header-titles {
+      text-align: left;
+    }
+
+    .header-titles h1 {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: 0.4px;
+    }
+
+    .header-titles p {
+      font-size: 0.78rem;
+      color: var(--gold-light);
+      font-weight: 700;
+      margin-top: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    /* TOMBOL BUKA POPUP LAPORAN */
+    .btn-open-popup {
+      width: 100%;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      border: none;
+      border-radius: 13px;
+      padding: 0.95rem 1rem;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(245, 158, 11, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s;
+    }
+
+    .btn-open-popup:active {
+      transform: scale(0.98);
+    }
+
+    /* RIWAYAT KIRIMAN HARI INI */
+    .history-section {
+      padding-top: 0.25rem;
+    }
+
+    .history-section h2 {
+      font-size: 0.95rem;
+      color: var(--gold-light);
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .history-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 0.9rem;
+    }
+
+    .history-card.border-lancar { border-left-color: #10b981; }
+    .history-card.border-padat { border-left-color: #f59e0b; }
+    .history-card.border-macet { border-left-color: #ef4444; }
+
+    .history-card-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .history-card h4 {
+      font-size: 0.98rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .history-card p {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    /* MODAL POPUP FORM INPUT */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 2px solid var(--gold);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 1.35rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+      animation: popIn 0.25s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-header h3 {
+      color: var(--gold-light);
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .btn-close {
+      background: #334155;
+      color: #fff;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="text"], select, textarea {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 0.75rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input[type="text"]:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .option-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .radio-pill input {
+      display: none;
+    }
+
+    .radio-pill span {
+      display: block;
+      text-align: center;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      padding: 0.65rem 0.4rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .radio-pill input:checked + span {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold-light);
+    }
+
+    .radio-pill.lalin-hijau input:checked + span {
+      background: #10b981;
+      color: #fff;
+      border-color: #34d399;
+    }
+    .radio-pill.lalin-kuning input:checked + span {
+      background: #f59e0b;
+      color: #000;
+      border-color: #fbbf24;
+    }
+    .radio-pill.lalin-merah input:checked + span {
+      background: #ef4444;
+      color: #fff;
+      border-color: #f87171;
+    }
+
+    .file-upload-box {
+      background: var(--bg-input);
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .file-upload-box:hover {
+      border-color: var(--gold);
+    }
+
+    .orientation-tip {
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: var(--gold-light);
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    #photoPreview {
+      max-width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-top: 0.75rem;
+      display: none;
+      background: #05080f;
+      border: 1px solid var(--border);
+    }
+
+    #photoOrientationBadge {
+      display: none;
+      margin-top: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 0.95rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- HEADER TETAP DI ATAS SAAT SCROLL -->
+    <div class="sticky-header-area">
+      <div class="top-header">
+        <!-- PITA ATAS TANGGAL & SYSTEM BY_Yefry.ZA -->
+        <div class="header-credit-strip">
+          <span class="live-date-display" id="headerDate">📅 Memuat tanggal...</span>
+          <span class="credit-badge">SYSTEM BY_Yefry.ZA</span>
+        </div>
+
+        <!-- LOGO SENKOM & JUDUL -->
+        <div class="header-main-row">
+          <img src="logo_senkom.jpg" alt="Logo SENKOM Mitra Polri" class="logo-input" />
+          <div class="header-titles">
+            <h1>POSKO MUDIK LEBARAN 2027</h1>
+            <p>PORTAL LAPORAN PETUGAS SE-BANTEN</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOMBOL KIRIM LAPORAN IKUT TERKUNCI DI ATAS -->
+      <button class="btn-open-popup" onclick="openInputModal()">
+        KIRIM LAPORAN KE POSKO UTAMA
+      </button>
+    </div>
+
+    <!-- DAFTAR LAPORAN TERKIRIM (HANYA MEMUAT TEKS RINGAN) -->
+    <div class="history-section">
+      <h2>
+        <span>Terkirim ke Layar Utama Hari Ini</span>
+        <span id="countToday" style="background:#1e293b; border:1px solid #334155; padding:2px 10px; border-radius:99px; font-size:0.82rem;">0</span>
+      </h2>
+      <div class="history-list" id="historyList">
+        <div style="text-align:center; color:#64748b; padding:1.5rem;">Memuat data posko...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL POPUP FORM INPUT -->
+  <div class="modal-overlay" id="inputModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>📝 FORM LAPORAN POSKO</h3>
+        <button class="btn-close" onclick="closeInputModal()">✕</button>
+      </div>
+
+      <form id="laporanForm">
+        <div class="form-group">
+          <label>Titik Posko SENKOM Banten *</label>
+          <select id="posko" required>
+            <option value="">-- Pilih Lokasi Posko --</option>
+            <option value="POSKO PELABUHAN MERAK">Posko Pelabuhan Merak</option>
+            <option value="POSKO KOTA CILEGON">Posko Kota Cilegon</option>
+            <option value="POSKO KOTA SERANG">Posko Kota Serang</option>
+            <option value="POSKO KAB. SERANG (ANYER / TOL)">Posko Kab. Serang (Anyer / Tol)</option>
+            <option value="POSKO KOTA TANGERANG">Posko Kota Tangerang</option>
+            <option value="POSKO KAB. TANGERANG (BALARAJA / CIKUPA)">Posko Kab. Tangerang (Balaraja / Cikupa)</option>
+            <option value="POSKO TANGERANG SELATAN">Posko Tangerang Selatan</option>
+            <option value="POSKO KAB. PANDEGLANG (CARITA / LABUAN)">Posko Kab. Pandeglang (Carita / Labuan)</option>
+            <option value="POSKO KAB. LEBAK (RANGKASBITUNG)">Posko Kab. Lebak (Rangkasbitung)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>1. Nama Pelapor *</label>
+          <input type="text" id="pelapor" placeholder="Contoh: Bpk. Ahmad / Anggota Cilegon" required />
+        </div>
+
+        <div class="form-group">
+          <label>2. Kondisi Cuaca *</label>
+          <div class="option-grid">
+            <label class="radio-pill">
+              <input type="radio" name="cuaca" value="Panas" checked />
+              <span>☀️ Panas</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="cuaca" value="Mendung" />
+              <span>⛅ Mendung</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="cuaca" value="Hujan" />
+              <span>🌧️ Hujan</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>3. Situasi Arus Lalu Lintas *</label>
+          <div class="option-grid-2">
+            <label class="radio-pill lalin-hijau">
+              <input type="radio" name="lalin" value="Lancar" checked />
+              <span>🟢 Lancar</span>
+            </label>
+            <label class="radio-pill lalin-kuning">
+              <input type="radio" name="lalin" value="Padat Merayap" />
+              <span>🟡 Padat Merayap</span>
+            </label>
+            <label class="radio-pill lalin-merah">
+              <input type="radio" name="lalin" value="Macet Total" />
+              <span>🔴 Macet Total</span>
+            </label>
+            <label class="radio-pill lalin-merah">
+              <input type="radio" name="lalin" value="Rekayasa Lalin / One Way" />
+              <span>🚨 Rekayasa / One Way</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>4. Uraian Laporan / Kejadian *</label>
+          <textarea id="laporan" rows="2" placeholder="Tuliskan situasi arus mudik, kejadian menonjol, atau bantuan pemudik..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>5. Foto Dokumentasi Lapangan *</label>
+          <div class="orientation-tip">
+            💡 <strong>Tips Kamera:</strong> Disarankan memotret posisi miring (<strong>Lanskap</strong>) agar memenuhi layar TV posko. Foto tegak (<strong>Potret</strong>) tetap didukung penuh tanpa terpotong.
+          </div>
+          <div class="file-upload-box" onclick="document.getElementById('fotoInput').click()">
+            <div style="font-size: 1.5rem;">📷</div>
+            <div style="font-size: 0.9rem; font-weight: 700; color: var(--gold-light);">Ketuk untuk Ambil Foto / Pilih Galeri</div>
+            <img id="photoPreview" alt="Preview Foto" />
+            <div id="photoOrientationBadge"></div>
+          </div>
+          <input type="file" id="fotoInput" accept="image/*" capture="environment" style="display: none;" required />
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnSubmit">🚀 KIRIM KE LAYAR UTAMA POSKO</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, push, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBicxSl9Mp5L_QMO7MVxHemLDsI4-xiZrE",
+      authDomain: "webinputpersinasasadcilegon.firebaseapp.com",
+      databaseURL: "https://webinputpersinasasadcilegon-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "webinputpersinasasadcilegon",
+      storageBucket: "webinputpersinasasadcilegon.firebasestorage.app",
+      messagingSenderId: "1095715295012",
+      appId: "1:1095715295012:web:0d4c1e845057aef7eaedb1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let compressedBase64 = "";
+
+    function updateHeaderDate() {
+      const formattedDate = new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        weekday: 'long',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }).format(new Date());
+      document.getElementById('headerDate').textContent = `📅 ${formattedDate}`;
+    }
+
+    updateHeaderDate();
+    setInterval(updateHeaderDate, 60000);
+
+    function getTodayDateKey() {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Jakarta',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).formatToParts(now);
+      const y = parts.find(p => p.type === 'year').value;
+      const m = parts.find(p => p.type === 'month').value;
+      const d = parts.find(p => p.type === 'day').value;
+      return `${y}-${m}-${d}`;
+    }
+
+    function getCurrentTimeWIB() {
+      return new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(new Date()).replace(/\./g, ':');
+    }
+
+    window.openInputModal = function() {
+      document.getElementById('inputModal').classList.add('open');
+    };
+
+    window.closeInputModal = function() {
+      document.getElementById('inputModal').classList.remove('open');
+    };
+
+    document.getElementById('fotoInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const MAX_LONG_EDGE = 1000;
+          let width = img.width;
+          let height = img.height;
+          const isLandscape = width >= height;
+
+          if (width > height && width > MAX_LONG_EDGE) {
+            height = Math.round((height * MAX_LONG_EDGE) / width);
+            width = MAX_LONG_EDGE;
+          } else if (height > width && height > MAX_LONG_EDGE) {
+            width = Math.round((width * MAX_LONG_EDGE) / height);
+            height = MAX_LONG_EDGE;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          compressedBase64 = canvas.toDataURL('image/jpeg', 0.68);
+          const preview = document.getElementById('photoPreview');
+          const badge = document.getElementById('photoOrientationBadge');
+          preview.src = compressedBase64;
+          preview.style.display = 'inline-block';
+          badge.style.display = 'block';
+          badge.textContent = isLandscape
+            ? `✅ Format Lanskap (${width}x${height}px) — Optimal untuk Layar TV`
+            : `✅ Format Potret (${width}x${height}px) — Akan tampil utuh tanpa terpotong`;
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('laporanForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      if (!compressedBase64) {
+        alert('Silakan ambil atau pilih foto dokumentasi terlebih dahulu.');
+        return;
+      }
+
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.textContent = '⏳ MENGIRIM LAPORAN...';
+
+      const dateKey = getTodayDateKey();
+      const nowTs = Date.now();
+
+      // Buat ID unik yang sama untuk jalur teks dan jalur foto
+      const newReportKey = push(ref(db, `laporan_mudik/${dateKey}`)).key;
+
+      const textPayload = {
+        posko: document.getElementById('posko').value,
+        pelapor: document.getElementById('pelapor').value.trim(),
+        cuaca: document.querySelector('input[name="cuaca"]:checked').value,
+        lalin: document.querySelector('input[name="lalin"]:checked').value,
+        laporan: document.getElementById('laporan').value.trim(),
+        hasFoto: true,
+        waktu: getCurrentTimeWIB(),
+        tanggal: dateKey,
+        timestamp: nowTs
+      };
+
+      const photoPayload = {
+        foto: compressedBase64,
+        timestamp: nowTs
+      };
+
+      try {
+        // Simpan teks & foto secara terpisah dalam satu transaksi atomik
+        const updates = {};
+        updates[`laporan_mudik/${dateKey}/${newReportKey}`] = textPayload;
+        updates[`laporan_foto/${dateKey}/${newReportKey}`] = photoPayload;
+        await update(ref(db), updates);
+
+        document.getElementById('laporanForm').reset();
+        document.getElementById('photoPreview').style.display = 'none';
+        document.getElementById('photoOrientationBadge').style.display = 'none';
+        compressedBase64 = "";
+        closeInputModal();
+        alert('✅ Laporan berhasil terkirim dan langsung tampil di Layar Utama Posko!');
+      } catch (err) {
+        console.error(err);
+        alert('❌ Gagal mengirim laporan: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 KIRIM KE LAYAR UTAMA POSKO';
+      }
+    });
+
+    function getBorderClass(lalin) {
+      if (!lalin) return 'border-lancar';
+      const l = lalin.toLowerCase();
+      if (l.includes('macet') || l.includes('rekayasa')) return 'border-macet';
+      if (l.includes('padat')) return 'border-padat';
+      return 'border-lancar';
+    }
+
+    function getLalinColor(lalin) {
+      if (!lalin) return '#34d399';
+      const l = lalin.toLowerCase();
+      if (l.includes('macet') || l.includes('rekayasa')) return '#f87171';
+      if (l.includes('padat')) return '#fbbf24';
+      return '#34d399';
+    }
+
+    // Hanya memantau jalur teks (super ringan & hemat kuota)
+    const todayRef = ref(db, `laporan_mudik/${getTodayDateKey()}`);
+    onValue(todayRef, (snapshot) => {
+      const data = snapshot.val();
+      const list = [];
+      if (data) {
+        Object.keys(data).forEach(k => list.push(data[k]));
+      }
+      list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      document.getElementById('countToday').textContent = list.length;
+      const container = document.getElementById('historyList');
+
+      if (list.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color:#64748b; padding:1.5rem;">Belum ada laporan terkirim hari ini.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(item => `
+        <div class="history-card ${getBorderClass(item.lalin)}">
+          <div class="history-card-top">
+            <span>🕒 ${item.waktu} WIB • ${item.cuaca}</span>
+            <span style="color:${getLalinColor(item.lalin)};">${item.lalin}</span>
+          </div>
+          <h4>${item.posko}</h4>
+          <p>${item.laporan}</p>
+          <div style="font-size:0.78rem; color:#94a3b8; margin-top:6px;">👮 Pelapor: ${item.pelapor}</div>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
+</html>

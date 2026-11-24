@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POSKO MUDIK LEBARAN 2027 - SENKOM MITRA POLRI BANTEN</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <style>
+    :root {
+      --bg-dark: #070b14;
+      --bg-panel: #0f172a;
+      --bg-card: #1e293b;
+      --border-color: #334155;
+      --gold: #f59e0b;
+      --gold-light: #fbbf24;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* STYLING LOGO GAMBAR SENKOM */
+    .logo-welcome {
+      width: 105px;
+      height: 105px;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 16px;
+      border: 3px solid var(--gold);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo-header {
+      width: 62px;
+      height: 62px;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 4px;
+      border-radius: 12px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+      flex-shrink: 0;
+    }
+
+    /* WELCOME SCREEN OVERLAY */
+    #welcomeScreen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #1e293b 0%, #070b14 100%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .welcome-box {
+      background: rgba(15, 23, 42, 0.92);
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      padding: 2.75rem 3.5rem;
+      max-width: 720px;
+      box-shadow: 0 0 50px rgba(245, 158, 11, 0.25);
+    }
+
+    .welcome-box h1 {
+      font-size: 2.2rem;
+      color: var(--gold-light);
+      margin: 1rem 0 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    .welcome-box p {
+      color: var(--text-muted);
+      font-size: 1.08rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      font-weight: 800;
+      font-size: 1.2rem;
+      padding: 1rem 2.4rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-start:hover {
+      transform: scale(1.04);
+      box-shadow: 0 12px 30px rgba(245, 158, 11, 0.6);
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      border-bottom: 3px solid var(--gold);
+      padding: 0.65rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 86px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand-title h1 {
+      font-size: 1.7rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    .brand-title span {
+      display: inline-block;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .clock-box {
+      text-align: right;
+      border-right: 1px solid var(--border-color);
+      padding-right: 1.25rem;
+    }
+
+    #liveClock {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--gold-light);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+
+    #liveDate {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: flex-end;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-mini {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-mini:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    .btn-mini:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .btn-pdf {
+      background: #dc2626;
+      border-color: #ef4444;
+      color: #fff;
+    }
+
+    .btn-pdf:hover {
+      background: #b91c1c;
+      color: #fff;
+    }
+
+    .system-credit {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--gold-light);
+      letter-spacing: 1px;
+      background: rgba(245, 158, 11, 0.12);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    /* MAIN SPLIT LAYOUT: 75% FOTO SPOTLIGHT | 25% LIVE FEED */
+    main {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 7.5fr 2.5fr;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      overflow: hidden;
+    }
+
+    /* LEFT PANEL: PHOTO-HERO SPOTLIGHT */
+    .spotlight-panel {
+      background: var(--bg-panel);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+
+    .spotlight-topbar {
+      background: rgba(30, 41, 59, 0.95);
+      padding: 0.55rem 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .slide-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--gold-light);
+    }
+
+    .slide-controls button {
+      background: var(--bg-dark);
+      color: #fff;
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+
+    .slide-controls button:hover {
+      border-color: var(--gold);
+    }
+
+    .slide-progress-bar {
+      height: 4px;
+      background: #1e293b;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    #slideProgressFill {
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width 1s linear;
+    }
+
+    .spotlight-content {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-stage {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      background: #04070d;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-bg-blur {
+      position: absolute;
+      inset: -25px;
+      width: calc(100% + 50px);
+      height: calc(100% + 50px);
+      object-fit: cover;
+      filter: blur(26px) brightness(0.38);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .photo-main {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 28px rgba(0, 0, 0, 0.85));
+    }
+
+    /* BADGE ATAS FOTO (RINGKAS 1 BARIS) */
+    .photo-overlay-top {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      pointer-events: none;
+    }
+
+    .posko-pill {
+      background: rgba(15, 23, 42, 0.86);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      border-left: 4px solid var(--gold);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.55);
+      display: inline-flex;
+      align-items: center;
+      max-width: 62%;
+      overflow: hidden;
+    }
+
+    .posko-pill h2 {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status-pills-right {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .info-chip {
+      background: rgba(15, 23, 42, 0.86);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-color);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.84rem;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.55);
+    }
+
+    .lalin-chip {
+      padding: 0.35rem 0.8rem;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.55);
+      backdrop-filter: blur(8px);
+    }
+
+    .lalin-lancar { background: rgba(6, 78, 59, 0.92); color: #34d399; border: 1.5px solid #10b981; }
+    .lalin-padat { background: rgba(120, 53, 15, 0.92); color: #fbbf24; border: 1.5px solid #f59e0b; }
+    .lalin-macet { background: rgba(127, 29, 29, 0.94); color: #fca5a5; border: 1.5px solid #ef4444; }
+
+    /* KOTAK URAIAN BAWAH DENGAN TINGGI TERKUNCI & AUTO-SCROLL */
+    .caption-bar {
+      background: linear-gradient(180deg, #131c31 0%, #0b1120 100%);
+      border-top: 2px solid var(--gold);
+      padding: 0.7rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.25rem;
+      height: 122px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .caption-text-wrap {
+      flex: 1;
+      height: 100%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .caption-header-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      flex-shrink: 0;
+    }
+
+    .caption-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--gold-light);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .auto-scroll-badge {
+      display: none;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 1px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+    }
+
+    .caption-scroll-viewport {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #slideDesc {
+      font-size: 1.15rem;
+      line-height: 1.48;
+      color: #f8fafc;
+      font-weight: 600;
+      word-wrap: break-word;
+      will-change: transform, opacity;
+      transition: opacity 0.25s ease;
+    }
+
+    .caption-reporter {
+      text-align: right;
+      background: rgba(30, 41, 59, 0.78);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 0.95rem;
+      border-radius: 10px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .caption-reporter small {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .caption-reporter strong {
+      font-size: 0.96rem;
+      color: var(--gold-light);
+      line-height: 1.2;
+    }
+
+    .caption-time {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state h2 {
+      color: var(--gold-light);
+      margin: 1rem 0 0.5rem;
+      font-size: 1.6rem;
+    }
+
+    /* RIGHT PANEL: LIVE LIST BANTEN */
+    .feed-panel {
+      background: var(--bg-panel);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .feed-header {
+      background: #1e293b;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .feed-header h3 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--gold-light);
+      letter-spacing: 0.5px;
+    }
+
+    .badge-count {
+      background: var(--gold);
+      color: #000;
+      font-weight: 900;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+    }
+
+    #feedList {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .feed-item {
+      background: var(--bg-card);
+      border-radius: 10px;
+      padding: 0.75rem;
+      border-left: 5px solid var(--green);
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .feed-item:hover {
+      background: #273549;
+      transform: translateX(3px);
+    }
+
+    .feed-item.active-slide {
+      outline: 2px solid var(--gold);
+      background: #263348;
+    }
+
+    .feed-item.border-lancar { border-left-color: var(--green); }
+    .feed-item.border-padat { border-left-color: var(--yellow); }
+    .feed-item.border-macet { border-left-color: var(--red); }
+
+    .feed-item-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+      font-weight: 700;
+    }
+
+    .feed-item-posko {
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .feed-item-meta {
+      display: flex;
+      gap: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .feed-item-desc {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* FOOTER RUNNING TEXT */
+    footer {
+      background: #0f172a;
+      border-top: 2px solid var(--gold);
+      height: 40px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .ticker-label {
+      background: var(--gold);
+      color: #000;
+      font-weight: 900;
+      padding: 0 1.2rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: 0.86rem;
+      letter-spacing: 1px;
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    .ticker-wrap {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ticker-move {
+      display: inline-block;
+      padding-left: 100%;
+      animation: ticker 35s linear infinite;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: #f8fafc;
+    }
+
+    @keyframes ticker {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
+
+    /* POPUP NEW REPORT NOTIFICATION */
+    #newReportPopup {
+      position: fixed;
+      top: 105px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.8);
+      background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+      border: 3px solid var(--gold-light);
+      color: #fff;
+      padding: 1.35rem 2.25rem;
+      border-radius: 16px;
+      z-index: 5000;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #newReportPopup.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    #newReportPopup h2 {
+      font-size: 1.7rem;
+      color: var(--gold-light);
+      margin-bottom: 0.25rem;
+      letter-spacing: 1px;
+    }
+
+    /* MODAL PASSWORD PDF */
+    #pdfPasswordModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 9500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    #pdfPasswordModal.open {
+      display: flex;
+    }
+
+    .pwd-box {
+      background: #131c31;
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 1.75rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .pwd-box h3 {
+      color: var(--gold-light);
+      font-size: 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .pwd-box p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1.15rem;
+    }
+
+    .pwd-input {
+      width: 100%;
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 0.65rem;
+      outline: none;
+    }
+
+    .pwd-input:focus {
+      border-color: var(--gold);
+    }
+
+    #pwdErrorMsg {
+      color: #f87171;
+      font-size: 0.82rem;
+      font-weight: 700;
+      min-height: 20px;
+      margin-bottom: 0.75rem;
+    }
+
+    .pwd-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .pwd-actions button {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-pwd-cancel {
+      background: #334155;
+      color: #fff;
+    }
+
+    .btn-pwd-confirm {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    .btn-pwd-confirm:hover {
+      background: #b91c1c;
+    }
+
+    /* TOMBOL & OVERLAY BREAKING NEWS FULLSCREEN */
+    .btn-breaking {
+      background: linear-gradient(135deg, #ef4444, #991b1b);
+      border: 1px solid #fca5a5;
+      color: #fff;
+      animation: pulseRed 2s infinite;
+    }
+
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.65); }
+      50% { box-shadow: 0 0 12px 3px rgba(239, 68, 68, 0.85); }
+    }
+
+    #breakingNewsScreen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 8500;
+      display: none;
+      flex-direction: column;
+      animation: flashIn 0.45s ease-out;
+    }
+
+    #breakingNewsScreen.active {
+      display: flex;
+    }
+
+    @keyframes flashIn {
+      0% { opacity: 0; transform: scale(1.04); background: #dc2626; }
+      40% { opacity: 1; background: #7f1d1d; }
+      100% { opacity: 1; transform: scale(1); background: #000; }
+    }
+
+    .bn-video-wrapper {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #bnYoutubePlayer, #bnDirectVideo {
+      width: 100%;
+      height: 100%;
+      border: none;
+      object-fit: contain;
+    }
+
+    .bn-top-bar {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      right: 20px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .bn-live-pill {
+      background: rgba(185, 28, 28, 0.92);
+      border: 2px solid #fbbf24;
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.75);
+    }
+
+    .bn-dot {
+      width: 10px;
+      height: 10px;
+      background: #fbbf24;
+      border-radius: 50%;
+      animation: blinkDot 0.8s infinite alternate;
+    }
+
+    @keyframes blinkDot {
+      from { opacity: 0.3; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1.2); }
+    }
+
+    .btn-bn-close-local {
+      pointer-events: auto;
+      background: rgba(15, 23, 42, 0.85);
+      color: #cbd5e1;
+      border: 1px solid #475569;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-bn-close-local:hover {
+      border-color: #fbbf24;
+      color: #fff;
+    }
+
+    /* LOWER THIRD ALA TV BERITA */
+    .bn-lower-third {
+      background: linear-gradient(90deg, #991b1b 0%, #dc2626 35%, #0f172a 100%);
+      border-top: 3px solid #fbbf24;
+      padding: 0.75rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .bn-lt-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 0;
+    }
+
+    .bn-lt-tag {
+      background: #fbbf24;
+      color: #000;
+      font-weight: 900;
+      font-size: 1.05rem;
+      padding: 6px 14px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .bn-lt-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bn-lt-right {
+      text-align: right;
+      white-space: nowrap;
+      color: #fde68a;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    /* MARS SENKOM BANNER */
+    #marsBanner {
+      position: fixed;
+      bottom: 52px;
+      right: 22px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 2px solid var(--gold);
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      z-index: 4000;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    }
+
+    .equalizer {
+      display: flex;
+      gap: 3px;
+      height: 20px;
+      align-items: flex-end;
+    }
+
+    .equalizer span {
+      width: 4px;
+      background: var(--gold);
+      animation: eq 0.6s infinite alternate;
+    }
+    .equalizer span:nth-child(2) { animation-delay: 0.2s; }
+    .equalizer span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes eq {
+      from { height: 5px; }
+      to { height: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- WELCOME SCREEN (FULLSCREEN + AUDIO UNLOCK) -->
+  <div id="welcomeScreen">
+    <div class="welcome-box">
+      <img src="logo_senkom.jpg" alt="Logo SENKOM Mitra Polri" class="logo-welcome" />
+
+      <h1>POSKO MUDIK LEBARAN 2027</h1>
+      <p>
+        Sistem Monitoring Laporan Visual Real-Time Jajaran SENKOM Mitra Polri Provinsi Banten.<br/>
+        Klik tombol di bawah untuk mengaktifkan <strong>Mode Layar Penuh (Fullscreen)</strong> serta <strong>Sistem Suara Otomatis</strong> (Notifikasi Laporan & Mars SENKOM tiap 10 menit).
+      </p>
+      <button class="btn-start" onclick="startCommandCenter()">
+        ▶ Aktifkan Layar Utama & Mode Suara
+      </button>
+      <div style="margin-top: 1.5rem; font-size: 0.85rem; color: #f59e0b; font-weight: 800; letter-spacing: 1px;">
+        SYSTEM BY_Yefry.ZA
+      </div>
+    </div>
+  </div>
+
+ <!-- MODAL PILIH TANGGAL & PASSWORD CETAK PDF -->
+  <div id="pdfPasswordModal">
+    <div class="pwd-box">
+      <h3>🔒 CETAK LAPORAN HARIAN PDF</h3>
+      <p>Pilih tanggal laporan dan masukkan password admin posko.</p>
+      
+      <div style="text-align:left; margin-bottom:0.75rem;">
+        <label style="display:block; font-size:0.8rem; font-weight:700; color:#fbbf24; margin-bottom:4px;">📅 Tanggal Laporan:</label>
+        <input type="date" id="pdfDateInput" class="pwd-input" style="letter-spacing:normal; margin-bottom:0; color-scheme:dark;" />
+      </div>
+
+      <div style="text-align:left; margin-bottom:0.25rem;">
+        <label style="display:block; font-size:0.8rem; font-weight:700; color:#fbbf24; margin-bottom:4px;">🔑 Password Admin:</label>
+        <input type="password" id="pdfPasswordInput" class="pwd-input" placeholder="••••••" />
+      </div>
+
+      <div id="pwdErrorMsg"></div>
+      <div class="pwd-actions">
+        <button class="btn-pwd-cancel" onclick="closePdfModal()">Batal</button>
+        <button class="btn-pwd-confirm" onclick="verifyPdfPassword()">Unduh PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI HAPUS DATA FIREBASE SETELAH DOWNLOAD PDF -->
+  <div id="deleteConfirmModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(5px); z-index:9600; display:none; align-items:center; justify-content:center; padding:1rem;">
+    <div class="pwd-box" style="max-width:430px;">
+      <h3 style="color:#34d399;">✅ PDF BERHASIL DIUNDUH!</h3>
+      <p id="deleteConfirmText" style="color:#e2e8f0; line-height:1.5; margin-top:0.5rem;">
+        Apakah data laporan & foto tanggal ini ingin dihapus dari Firebase untuk meringankan kapasitas database?
+      </p>
+      <div class="pwd-actions" style="margin-top:1rem;">
+        <button class="btn-pwd-cancel" onclick="closeDeleteModal()">Tidak, Simpan Data</button>
+        <button class="btn-pwd-confirm" id="btnConfirmDeleteData" onclick="executeDeleteDateData()">🗑️ Ya, Hapus Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL KONTROL ADMIN BREAKING NEWS -->
+  <div id="breakingControlModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(5px); z-index:9650; display:none; align-items:center; justify-content:center; padding:1rem;">
+    <div class="pwd-box" style="max-width:460px; text-align:left;">
+      <h3 style="text-align:center; color:#f87171;">🚨 SIARAN BREAKING NEWS SE-BANTEN</h3>
+      <p style="text-align:center;">Video akan langsung tayang layar penuh di seluruh Posko Induk dan otomatis kembali normal setelah video selesai.</p>
+
+      <div style="margin-bottom:0.75rem;">
+        <label style="display:block; font-size:0.8rem; font-weight:700; color:#fbbf24; margin-bottom:4px;">📺 Judul Breaking News:</label>
+        <input type="text" id="bnTitleInput" class="pwd-input" style="text-align:left; letter-spacing:normal; margin-bottom:0; font-size:0.95rem;" placeholder="Contoh: Pantauan Udara Antrean Pelabuhan Merak" />
+      </div>
+
+      <div style="margin-bottom:0.75rem;">
+        <label style="display:block; font-size:0.8rem; font-weight:700; color:#fbbf24; margin-bottom:4px;">🔗 Link Video (YouTube / YouTube Shorts / Link .MP4):</label>
+        <input type="text" id="bnUrlInput" class="pwd-input" style="text-align:left; letter-spacing:normal; margin-bottom:0; font-size:0.92rem;" placeholder="https://youtu.be/... atau https://.../video.mp4" />
+      </div>
+
+      <div style="margin-bottom:0.35rem;">
+        <label style="display:block; font-size:0.8rem; font-weight:700; color:#fbbf24; margin-bottom:4px;">🔑 Password Admin:</label>
+        <input type="password" id="bnPasswordInput" class="pwd-input" style="margin-bottom:0;" placeholder="••••••" />
+      </div>
+
+      <div id="bnErrorMsg" style="color:#f87171; font-size:0.82rem; font-weight:700; min-height:20px; margin:6px 0;"></div>
+
+      <div class="pwd-actions">
+        <button class="btn-pwd-cancel" onclick="closeBreakingModal()">Batal</button>
+        <button class="btn-pwd-confirm" id="btnStartBreaking" onclick="broadcastBreakingNews()">🚀 Tayangkan Sekarang</button>
+      </div>
+
+      <button onclick="stopGlobalBreakingNews()" style="width:100%; margin-top:10px; background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:0.55rem; border-radius:8px; font-size:0.8rem; font-weight:700; cursor:pointer;">
+        ⏹️ Hentikan Siaran Breaking News di Semua Layar
+      </button>
+    </div>
+  </div>
+
+  <!-- LAYAR PENUH SIARAN BREAKING NEWS -->
+  <div id="breakingNewsScreen">
+    <div class="bn-video-wrapper">
+      <div class="bn-top-bar">
+        <div class="bn-live-pill">
+          <span class="bn-dot"></span>
+          <span>SIARAN LANGSUNG POSKO SENKOM BANTEN</span>
+        </div>
+        <button class="btn-bn-close-local" onclick="closeBreakingNewsLocal()">✕ Tutup di Layar Ini</button>
+      </div>
+
+      <div id="bnYoutubeContainer" style="width:100%; height:100%; display:none;">
+        <div id="bnYoutubePlayer"></div>
+      </div>
+
+      <video id="bnDirectVideo" playsinline controls style="display:none;"></video>
+    </div>
+
+    <div class="bn-lower-third">
+      <div class="bn-lt-left">
+        <span class="bn-lt-tag">🚨 BREAKING NEWS</span>
+        <span class="bn-lt-title" id="bnDisplayTitle">INFORMASI TERKINI ARUS MUDIK LEBARAN 2027</span>
+      </div>
+      <div class="bn-lt-right">
+        SENKOM MITRA POLRI BANTEN<br/>
+        <span style="font-size:0.75rem; color:#cbd5e1;">SYSTEM BY_Yefry.ZA</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP NOTIFIKASI LAPORAN BARU -->
+  <div id="newReportPopup">
+    <h2>🚨 LAPORAN BARU MASUK!</h2>
+    <p id="popupDetail" style="font-size: 1.15rem; font-weight: 700;">Posko Merak - Petugas Lapangan</p>
+  </div>
+
+  <!-- BANNER PEMUTARAN MARS SENKOM -->
+  <div id="marsBanner">
+    <div class="equalizer"><span></span><span></span><span></span></div>
+    <div>
+      <div style="font-weight: 800; color: #fbbf24; font-size: 0.9rem;">MARS SENKOM MITRA POLRI</div>
+      <div id="marsStatusText" style="font-size: 0.75rem; color: #cbd5e1;">Pemutaran Otomatis Berkala (10 Menit)</div>
+    </div>
+    <button class="btn-mini" onclick="stopMars()">Stop</button>
+  </div>
+
+  <audio id="marsAudio" src="mars.mp3" preload="auto"></audio>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <img src="logo_senkom.jpg" alt="Logo SENKOM Mitra Polri" class="logo-header" />
+
+      <div class="brand-title">
+        <h1>POSKO MUDIK LEBARAN 2027</h1>
+        <span>SENKOM MITRA POLRI PROVINSI BANTEN</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="clock-box">
+        <div id="liveClock">00:00:00</div>
+        <div id="liveDate">Memuat Tanggal...</div>
+      </div>
+      <div class="header-actions">
+        <div class="action-buttons">
+          <button class="btn-mini btn-breaking" onclick="openBreakingModal()">🚨 NEWS</button>
+          <button class="btn-mini" onclick="playMarsSenkom(true)">🎵 Putar Mars</button>
+          <button class="btn-mini btn-pdf" id="btnPdfHeader" onclick="openPdfModal()">🔒 Cetak PDF Harian</button>
+          <button class="btn-mini" onclick="toggleFullscreen()">⛶ Layar Penuh</button>
+        </div>
+        <div class="system-credit">SYSTEM BY_Yefry.ZA</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT: 75% FOTO HERO SPOTLIGHT | 25% DAFTAR POSKO -->
+  <main>
+    <!-- KIRI: SOROTAN FOTO UTAMA -->
+    <section class="spotlight-panel" id="spotlightPanel">
+      <div class="spotlight-topbar">
+        <div class="slide-indicator">
+          <span>📸 DOKUMENTASI LAPANGAN POSKO</span>
+          <span id="slideCounter" style="background:#0f172a; padding:2px 10px; border-radius:6px; color:#fff;">0 / 0</span>
+          <span style="font-size: 0.78rem; color: #94a3b8;">(Slide Otomatis 5 Menit)</span>
+        </div>
+        <div class="slide-controls">
+          <button onclick="prevSlide()">◀ Sebelumnya</button>
+          <button onclick="nextSlide()">Berikutnya ▶</button>
+        </div>
+      </div>
+      <div class="slide-progress-bar">
+        <div id="slideProgressFill"></div>
+      </div>
+
+      <!-- KONTEN AKTIF -->
+      <div class="spotlight-content" id="activeSlideContent" style="display: none;">
+        <div class="photo-stage">
+          <img id="slidePhotoBg" class="photo-bg-blur" src="" alt="" />
+          <img id="slidePhoto" class="photo-main" src="" alt="Foto Laporan Posko" />
+
+          <!-- BADGE ATAS RINGKAS (1 BARIS) -->
+          <div class="photo-overlay-top">
+            <div class="posko-pill">
+              <h2 id="slidePosko">📍 POSKO MERAK</h2>
+            </div>
+
+            <div class="status-pills-right">
+              <div class="info-chip" id="slideCuaca">☀️ Panas</div>
+              <div class="lalin-chip lalin-lancar" id="slideLalin">LANCAR</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOTAK URAIAN DENGAN AUTO-SCROLL OTOMATIS + JAM DI PELAPOR -->
+        <div class="caption-bar">
+          <div class="caption-text-wrap">
+            <div class="caption-header-row">
+              <span class="caption-label">📋 Laporan Situasi / Kejadian</span>
+              <span class="auto-scroll-badge" id="autoScrollBadge">AUTO-SCROLL</span>
+            </div>
+            <div class="caption-scroll-viewport" id="captionViewport">
+              <p id="slideDesc">Situasi arus mudik terpantau aman dan terkendali.</p>
+            </div>
+          </div>
+          <div class="caption-reporter">
+            <small>👮 Pelapor Lapangan</small>
+            <strong id="slidePelapor">-</strong>
+            <span class="caption-time" id="slideTime">🕒 00:00 WIB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAMPILAN KOSONG -->
+      <div class="empty-state" id="emptySlideState">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <h2>MENUNGGU FOTO LAPORAN HARI INI</h2>
+        <p style="max-width: 520px; font-size: 1.05rem;">
+          Foto dokumentasi dari petugas Posko SENKOM se-Banten akan langsung tampil penuh di layar utama ini tanpa terpotong.
+        </p>
+      </div>
+    </section>
+
+    <!-- KANAN: FEED RINGKASAN POSKO SE-BANTEN -->
+    <aside class="feed-panel">
+      <div class="feed-header">
+        <h3>📍 LAPORAN MASUK HARI INI</h3>
+        <span class="badge-count" id="totalReportsBadge">0</span>
+      </div>
+      <div id="feedList">
+        <div style="text-align: center; color: #64748b; padding: 2rem 1rem;">
+          Belum ada data laporan untuk tanggal hari ini.
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- FOOTER RUNNING TEXT -->
+  <footer>
+    <div class="ticker-label">INFO POSKO BANTEN</div>
+    <div class="ticker-wrap">
+      <div class="ticker-move">
+        SENKOM MITRA POLRI PROVINSI BANTEN — SIAGA POSKO MUDIK LEBARAN 2027 • CALL CENTER KEPOLISIAN: 110 • JASA MARGA TOL TANGERANG-MERAK: 14080 • AMBULANS / GAWAT DARURAT: 119 • UTAMAKAN KESELAMATAN BUKAN KECEPATAN, ISTIRAHAT JIKA LELAH DI POSKO TERDEKAT • SYSTEM BY_Yefry.ZA
+      </div>
+    </div>
+  </footer>
+
+  <!-- FIREBASE & SYSTEM LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, onValue, get, remove, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // ============================================================
+    // PENGATURAN PASSWORD CETAK PDF HARIAN
+    // ============================================================
+    const PDF_PASSWORD = "SENKOM2027";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBicxSl9Mp5L_QMO7MVxHemLDsI4-xiZrE",
+      authDomain: "webinputpersinasasadcilegon.firebaseapp.com",
+      databaseURL: "https://webinputpersinasasadcilegon-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "webinputpersinasasadcilegon",
+      storageBucket: "webinputpersinasasadcilegon.firebasestorage.app",
+      messagingSenderId: "1095715295012",
+      appId: "1:1095715295012:web:0d4c1e845057aef7eaedb1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let reports = [];
+    let photoCache = {}; // Menyimpan foto yang sudah diunduh di memori TV
+    let currentSlideIndex = 0;
+    let currentDateKey = getTodayDateKey();
+    let knownReportIds = new Set();
+    let isFirstLoad = true;
+    let unsubscribeFirebase = null;
+
+    const SLIDE_DURATION_SEC = 300; // 5 menit
+    let slideElapsedSec = 0;
+    let audioCtx = null;
+
+    // ============================================================
+    // ENGINE AUTO-SCROLL URAIAN PANJANG (KECEPATAN BACA / DIKTE)
+    // ============================================================
+    let descAnimFrameId = null;
+    let descTimerId = null;
+
+    function stopDescAutoScroll() {
+      if (descAnimFrameId) {
+        cancelAnimationFrame(descAnimFrameId);
+        descAnimFrameId = null;
+      }
+      if (descTimerId) {
+        clearTimeout(descTimerId);
+        descTimerId = null;
+      }
+    }
+
+    function startDescAutoScroll() {
+      stopDescAutoScroll();
+
+      const viewport = document.getElementById('captionViewport');
+      const descEl = document.getElementById('slideDesc');
+      const badgeEl = document.getElementById('autoScrollBadge');
+
+      if (!viewport || !descEl) return;
+
+      descEl.style.opacity = '1';
+      descEl.style.transform = 'translateY(0px)';
+
+      requestAnimationFrame(() => {
+        const viewportHeight = viewport.clientHeight;
+        const contentHeight = descEl.scrollHeight;
+        const maxScroll = contentHeight - viewportHeight;
+
+        if (maxScroll <= 4) {
+          badgeEl.style.display = 'none';
+          return;
+        }
+
+        badgeEl.style.display = 'inline-block';
+
+        const PAUSE_TOP_MS = 6000;
+        const PAUSE_BOTTOM_MS = 5000;
+        const SCROLL_SPEED_PX_PER_SEC = 10;
+
+        function runCycle() {
+          descEl.style.transform = 'translateY(0px)';
+          descEl.style.opacity = '1';
+
+          descTimerId = setTimeout(() => {
+            let startTime = null;
+
+            function step(timestamp) {
+              if (!startTime) startTime = timestamp;
+              const elapsedSec = (timestamp - startTime) / 1000;
+              const currentOffset = Math.min(maxScroll, elapsedSec * SCROLL_SPEED_PX_PER_SEC);
+
+              descEl.style.transform = `translateY(-${currentOffset}px)`;
+
+              if (currentOffset < maxScroll) {
+                descAnimFrameId = requestAnimationFrame(step);
+              } else {
+                descTimerId = setTimeout(() => {
+                  descEl.style.opacity = '0';
+                  descTimerId = setTimeout(() => {
+                    runCycle();
+                  }, 280);
+                }, PAUSE_BOTTOM_MS);
+              }
+            }
+
+            descAnimFrameId = requestAnimationFrame(step);
+          }, PAUSE_TOP_MS);
+        }
+
+        runCycle();
+      });
+    }
+
+    window.addEventListener('resize', () => {
+      if (reports.length > 0) startDescAutoScroll();
+    });
+
+    function getTodayDateKey() {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Jakarta',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).formatToParts(now);
+      const y = parts.find(p => p.type === 'year').value;
+      const m = parts.find(p => p.type === 'month').value;
+      const d = parts.find(p => p.type === 'day').value;
+      return `${y}-${m}-${d}`;
+    }
+
+    function getFormattedDateIndo(dateObj = new Date()) {
+      return new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      }).format(dateObj);
+    }
+
+    function getFormattedTimeWIB(dateObj = new Date()) {
+      return new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }).format(dateObj).replace(/\./g, ':');
+    }
+
+    function getShortDateDDMMYYYY(dateObj = new Date()) {
+      const parts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Jakarta',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).formatToParts(dateObj);
+      const d = parts.find(p => p.type === 'day').value;
+      const m = parts.find(p => p.type === 'month').value;
+      const y = parts.find(p => p.type === 'year').value;
+      return `${d}-${m}-${y}`;
+    }
+
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('liveClock').textContent = getFormattedTimeWIB(now) + ' WIB';
+      document.getElementById('liveDate').textContent = getFormattedDateIndo(now);
+
+      const latestDateKey = getTodayDateKey();
+      if (latestDateKey !== currentDateKey) {
+        currentDateKey = latestDateKey;
+        knownReportIds.clear();
+        photoCache = {};
+        isFirstLoad = true;
+        reports = [];
+        currentSlideIndex = 0;
+        renderUI();
+        listenToTodayReports(currentDateKey);
+      }
+
+      if (reports.length > 1) {
+        slideElapsedSec++;
+        const pct = Math.min(100, (slideElapsedSec / SLIDE_DURATION_SEC) * 100);
+        document.getElementById('slideProgressFill').style.width = pct + '%';
+        if (slideElapsedSec >= SLIDE_DURATION_SEC) {
+          window.nextSlide();
+        }
+      } else {
+        document.getElementById('slideProgressFill').style.width = reports.length === 1 ? '100%' : '0%';
+      }
+    }, 1000);
+
+    // Ambil foto dari cache atau dari jalur terpisah laporan_foto
+    async function fetchReportPhoto(reportItem) {
+      if (!reportItem) return null;
+
+      // 1. Kompatibilitas data lama jika foto masih menyatu
+      if (reportItem.foto && reportItem.foto.startsWith('data:image')) {
+        photoCache[reportItem.id] = reportItem.foto;
+        return reportItem.foto;
+      }
+
+      // 2. Cek memori cache TV agar tidak mengunduh ulang
+      if (photoCache[reportItem.id]) {
+        return photoCache[reportItem.id];
+      }
+
+      // 3. Unduh dari jalur laporan_foto/{tanggal}/{id}
+      try {
+        const snap = await get(ref(db, `laporan_foto/${currentDateKey}/${reportItem.id}`));
+        const val = snap.val();
+        if (val && val.foto && val.foto.startsWith('data:image')) {
+          photoCache[reportItem.id] = val.foto;
+          return val.foto;
+        }
+      } catch (err) {
+        console.warn('Gagal memuat foto posko:', err);
+      }
+      return null;
+    }
+
+    function listenToTodayReports(dateKey) {
+      if (unsubscribeFirebase) unsubscribeFirebase();
+      const reportsRef = ref(db, `laporan_mudik/${dateKey}`);
+
+      unsubscribeFirebase = onValue(reportsRef, (snapshot) => {
+        const data = snapshot.val();
+        const loaded = [];
+        if (data) {
+          Object.keys(data).forEach((key) => {
+            loaded.push({ id: key, ...data[key] });
+          });
+        }
+
+        loaded.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+        if (!isFirstLoad) {
+          const newest = loaded.find(item => !knownReportIds.has(item.id));
+          if (newest) {
+            triggerNewReportNotification(newest);
+            currentSlideIndex = 0;
+            slideElapsedSec = 0;
+          }
+        }
+
+        loaded.forEach(item => knownReportIds.add(item.id));
+        isFirstLoad = false;
+        reports = loaded;
+
+        if (currentSlideIndex >= reports.length) {
+          currentSlideIndex = 0;
+        }
+        renderUI();
+      });
+    }
+
+    function renderUI() {
+      document.getElementById('totalReportsBadge').textContent = reports.length;
+      const feedList = document.getElementById('feedList');
+      const activeSlide = document.getElementById('activeSlideContent');
+      const emptyState = document.getElementById('emptySlideState');
+
+      if (reports.length === 0) {
+        stopDescAutoScroll();
+        activeSlide.style.display = 'none';
+        emptyState.style.display = 'flex';
+        document.getElementById('slideCounter').textContent = '0 / 0';
+        feedList.innerHTML = `<div style="text-align:center; color:#64748b; padding:2rem 1rem;">Belum ada data laporan untuk tanggal ${currentDateKey}.</div>`;
+        return;
+      }
+
+      activeSlide.style.display = 'flex';
+      emptyState.style.display = 'none';
+
+      const current = reports[currentSlideIndex];
+      document.getElementById('slideCounter').textContent = `${currentSlideIndex + 1} / ${reports.length}`;
+      document.getElementById('slidePosko').textContent = `📍 ${current.posko || 'POSKO BANTEN'}`;
+      document.getElementById('slidePelapor').textContent = current.pelapor || 'Petugas SENKOM';
+      document.getElementById('slideTime').textContent = `🕒 ${current.waktu || '-'} WIB`;
+      document.getElementById('slideDesc').textContent = current.laporan || '-';
+
+      startDescAutoScroll();
+
+      const cuacaMap = { 'Panas': '☀️ Panas', 'Mendung': '⛅ Mendung', 'Hujan': '🌧️ Hujan' };
+      document.getElementById('slideCuaca').textContent = cuacaMap[current.cuaca] || current.cuaca;
+
+      const lalinEl = document.getElementById('slideLalin');
+      lalinEl.textContent = current.lalin || 'Lancar';
+      lalinEl.className = 'lalin-chip ' + getLalinClass(current.lalin);
+
+      // Tampilkan foto dari cache jika sudah ada, atau unduh dari jalur laporan_foto
+      const cachedSrc = current.foto || photoCache[current.id];
+      if (cachedSrc) {
+        document.getElementById('slidePhoto').src = cachedSrc;
+        document.getElementById('slidePhotoBg').src = cachedSrc;
+      } else {
+        const loadingPlaceholder = createPhotoPlaceholder(current.posko, 'Memuat Foto Dokumentasi...');
+        document.getElementById('slidePhoto').src = loadingPlaceholder;
+        document.getElementById('slidePhotoBg').src = loadingPlaceholder;
+
+        const targetId = current.id;
+        fetchReportPhoto(current).then((fetchedSrc) => {
+          if (reports[currentSlideIndex]?.id !== targetId) return;
+          const finalSrc = fetchedSrc || createPhotoPlaceholder(current.posko, 'Laporan Tanpa Lampiran Foto');
+          document.getElementById('slidePhoto').src = finalSrc;
+          document.getElementById('slidePhotoBg').src = finalSrc;
+        });
+      }
+
+      feedList.innerHTML = reports.map((item, idx) => {
+        const borderClass = getFeedBorderClass(item.lalin);
+        const activeClass = idx === currentSlideIndex ? 'active-slide' : '';
+        return `
+          <div class="feed-item ${borderClass} ${activeClass}" onclick="selectSlide(${idx})">
+            <div class="feed-item-top">
+              <span>🕒 ${item.waktu || '-'} WIB</span>
+              <span>👮 ${item.pelapor || '-'}</span>
+            </div>
+            <div class="feed-item-posko">${item.posko || 'Posko Banten'}</div>
+            <div class="feed-item-meta">
+              <span style="color:#fbbf24;">${item.cuaca}</span>
+              <span>•</span>
+              <span style="color:${getLalinTextColor(item.lalin)};">${item.lalin}</span>
+            </div>
+            <div class="feed-item-desc">${item.laporan || ''}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getLalinClass(lalin) {
+      if (!lalin) return 'lalin-lancar';
+      const l = lalin.toLowerCase();
+      if (l.includes('macet') || l.includes('rekayasa')) return 'lalin-macet';
+      if (l.includes('padat')) return 'lalin-padat';
+      return 'lalin-lancar';
+    }
+
+    function getFeedBorderClass(lalin) {
+      if (!lalin) return 'border-lancar';
+      const l = lalin.toLowerCase();
+      if (l.includes('macet') || l.includes('rekayasa')) return 'border-macet';
+      if (l.includes('padat')) return 'border-padat';
+      return 'border-lancar';
+    }
+
+    function getLalinTextColor(lalin) {
+      if (!lalin) return '#34d399';
+      const l = lalin.toLowerCase();
+      if (l.includes('macet') || l.includes('rekayasa')) return '#f87171';
+      if (l.includes('padat')) return '#fbbf24';
+      return '#34d399';
+    }
+
+    function createPhotoPlaceholder(poskoName, statusLabel) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+        <rect width="800" height="450" fill="#0f172a"/>
+        <text x="400" y="210" fill="#f59e0b" font-family="sans-serif" font-size="28" font-weight="bold" text-anchor="middle">SENKOM MITRA POLRI BANTEN</text>
+        <text x="400" y="255" fill="#94a3b8" font-family="sans-serif" font-size="20" text-anchor="middle">${statusLabel} (${poskoName || 'Posko'})</text>
+      </svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    window.nextSlide = function() {
+      if (reports.length === 0) return;
+      currentSlideIndex = (currentSlideIndex + 1) % reports.length;
+      slideElapsedSec = 0;
+      renderUI();
+    };
+
+    window.prevSlide = function() {
+      if (reports.length === 0) return;
+      currentSlideIndex = (currentSlideIndex - 1 + reports.length) % reports.length;
+      slideElapsedSec = 0;
+      renderUI();
+    };
+
+    window.selectSlide = function(index) {
+      currentSlideIndex = index;
+      slideElapsedSec = 0;
+      renderUI();
+    };
+
+    function playNotificationChime() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const freqs = [587.33, 880, 1174.66];
+        freqs.forEach((f, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now + idx * 0.14);
+          gain.gain.setValueAtTime(0.25, now + idx * 0.14);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.14 + 0.5);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + idx * 0.14);
+          osc.stop(now + idx * 0.14 + 0.5);
+        });
+      } catch (e) {
+        console.warn('Audio chime blocked:', e);
+      }
+    }
+
+    function triggerNewReportNotification(report) {
+      playNotificationChime();
+      const popup = document.getElementById('newReportPopup');
+      document.getElementById('popupDetail').textContent = `${report.posko} • Pelapor: ${report.pelapor} (${report.lalin})`;
+      popup.classList.add('show');
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 6500);
+    }
+
+    window.playMarsSenkom = function(isManual = false) {
+      const marsAudio = document.getElementById('marsAudio');
+      const banner = document.getElementById('marsBanner');
+      const statusText = document.getElementById('marsStatusText');
+
+      banner.style.display = 'flex';
+      marsAudio.currentTime = 0;
+
+      marsAudio.play().then(() => {
+        statusText.textContent = isManual ? 'Pemutaran Manual Aktif' : 'Pemutaran Otomatis Berkala (10 Menit)';
+      }).catch(() => {
+        statusText.textContent = 'File mars_senkom.mp3 belum ditemukan di folder (Simulasi Aktif)';
+        playNotificationChime();
+        setTimeout(() => { banner.style.display = 'none'; }, 5000);
+      });
+
+      marsAudio.onended = () => {
+        banner.style.display = 'none';
+      };
+    };
+
+    window.stopMars = function() {
+      const marsAudio = document.getElementById('marsAudio');
+      marsAudio.pause();
+      marsAudio.currentTime = 0;
+      document.getElementById('marsBanner').style.display = 'none';
+    };
+
+    setInterval(() => {
+      playMarsSenkom(false);
+    }, 10 * 60 * 1000);
+
+    window.startCommandCenter = function() {
+      document.getElementById('welcomeScreen').style.display = 'none';
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      playNotificationChime();
+      toggleFullscreen();
+      if (reports.length > 0) startDescAutoScroll();
+    };
+
+    window.toggleFullscreen = function() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn(err));
+      } else {
+        document.exitFullscreen().catch(err => console.warn(err));
+      }
+    };
+
+    // ============================================================
+    // LOGIKA MODAL PILIH TANGGAL, CETAK PDF & OPSI HAPUS DATA
+    // ============================================================
+    let pendingDeleteDateKey = "";
+
+    function parseDateKeyToSafeDate(dateKey) {
+      const [y, m, d] = dateKey.split('-').map(Number);
+      return new Date(Date.UTC(y, m - 1, d, 5, 0, 0));
+    }
+
+    window.openPdfModal = function() {
+      const modal = document.getElementById('pdfPasswordModal');
+      const dateInput = document.getElementById('pdfDateInput');
+      const pwdInput = document.getElementById('pdfPasswordInput');
+      const errMsg = document.getElementById('pwdErrorMsg');
+
+      dateInput.value = getTodayDateKey();
+      pwdInput.value = '';
+      errMsg.textContent = '';
+      modal.classList.add('open');
+      setTimeout(() => pwdInput.focus(), 100);
+    };
+
+    window.closePdfModal = function() {
+      document.getElementById('pdfPasswordModal').classList.remove('open');
+    };
+
+    window.closeDeleteModal = function() {
+      document.getElementById('deleteConfirmModal').style.display = 'none';
+      pendingDeleteDateKey = "";
+    };
+
+    window.verifyPdfPassword = async function() {
+      const selectedDate = document.getElementById('pdfDateInput').value;
+      const inputVal = document.getElementById('pdfPasswordInput').value;
+      const errMsg = document.getElementById('pwdErrorMsg');
+
+      if (!selectedDate) {
+        errMsg.textContent = '⚠️ Silakan pilih tanggal laporan terlebih dahulu.';
+        return;
+      }
+
+      if (inputVal === PDF_PASSWORD) {
+        closePdfModal();
+        await generateDailyPDF(selectedDate);
+      } else {
+        errMsg.textContent = '❌ Password salah! Silakan coba lagi.';
+        document.getElementById('pdfPasswordInput').value = '';
+        document.getElementById('pdfPasswordInput').focus();
+      }
+    };
+
+    document.getElementById('pdfPasswordInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        verifyPdfPassword();
+      }
+    });
+
+    async function fetchPhotoByDateAndId(dateKey, item) {
+      if (item.foto && item.foto.startsWith('data:image')) return item.foto;
+      if (dateKey === currentDateKey && photoCache[item.id]) return photoCache[item.id];
+
+      try {
+        const snap = await get(ref(db, `laporan_foto/${dateKey}/${item.id}`));
+        const val = snap.val();
+        if (val && val.foto && val.foto.startsWith('data:image')) {
+          if (dateKey === currentDateKey) photoCache[item.id] = val.foto;
+          return val.foto;
+        }
+      } catch (e) {
+        console.warn('Gagal mengambil foto PDF:', e);
+      }
+      return null;
+    }
+
+    async function generateDailyPDF(targetDateKey) {
+      const pdfBtn = document.getElementById('btnPdfHeader');
+      const origLabel = pdfBtn.textContent;
+      pdfBtn.disabled = true;
+      pdfBtn.textContent = '⏳ Menyiapkan PDF...';
+
+      try {
+        // Ambil data laporan sesuai tanggal yang dipilih
+        const textSnap = await get(ref(db, `laporan_mudik/${targetDateKey}`));
+        const rawData = textSnap.val();
+
+        if (!rawData) {
+          const tglKosong = getShortDateDDMMYYYY(parseDateKeyToSafeDate(targetDateKey));
+          alert(`ℹ️ Tidak ada data laporan tersimpan untuk tanggal ${tglKosong}.`);
+          return;
+        }
+
+        const dateReports = Object.keys(rawData).map(key => ({
+          id: key,
+          ...rawData[key]
+        }));
+
+        // Urutkan kronologis dari pagi ke malam
+        dateReports.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+        // Unduh semua foto untuk tanggal tersebut
+        const photoMap = {};
+        await Promise.all(
+          dateReports.map(async (item) => {
+            photoMap[item.id] = await fetchPhotoByDateAndId(targetDateKey, item);
+          })
+        );
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+        const now = new Date();
+        const jamCetak = getFormattedTimeWIB(now);
+        const tglCetak = getShortDateDDMMYYYY(now);
+        const tglLaporanJudul = getFormattedDateIndo(parseDateKeyToSafeDate(targetDateKey));
+        const tglLaporanPendek = getShortDateDDMMYYYY(parseDateKeyToSafeDate(targetDateKey));
+
+        // HEADER KOP PDF: KUNING-ORANYE ADEM
+        doc.setFillColor(253, 224, 155);
+        doc.rect(0, 0, 210, 32, 'F');
+        doc.setDrawColor(217, 119, 6);
+        doc.setLineWidth(0.5);
+        doc.line(0, 32, 210, 32);
+
+        doc.setTextColor(15, 23, 42);
+        doc.setFontSize(15);
+        doc.setFont('helvetica', 'bold');
+        doc.text('SENKOM MITRA POLRI PROVINSI BANTEN', 105, 12, { align: 'center' });
+
+        doc.setTextColor(146, 64, 14);
+        doc.setFontSize(12);
+        doc.text('LAPORAN HARIAN POSKO MUDIK LEBARAN 2027', 105, 19, { align: 'center' });
+
+        doc.setTextColor(51, 65, 85);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Tanggal Laporan: ${tglLaporanJudul} | Total Laporan: ${dateReports.length}`, 105, 26, { align: 'center' });
+
+        const tableRows = dateReports.map((item, index) => [
+          index + 1,
+          `${item.waktu || '-'} WIB`,
+          `${item.posko || '-'}\nPelapor: ${item.pelapor || '-'}`,
+          `Cuaca: ${item.cuaca || '-'}\nLalin: ${item.lalin || '-'}`,
+          item.laporan || '-',
+          ''
+        ]);
+
+        doc.autoTable({
+          startY: 38,
+          head: [['No', 'Waktu', 'Posko & Pelapor', 'Cuaca & Lalin', 'Uraian Kejadian', 'Dokumentasi']],
+          body: tableRows,
+          theme: 'grid',
+          styles: {
+            fontSize: 8.5,
+            cellPadding: 3,
+            valign: 'middle',
+            overflow: 'linebreak',
+            lineColor: [180, 195, 210],
+            lineWidth: 0.25
+          },
+          headStyles: {
+            fillColor: [186, 230, 253], // Biru langit adem
+            textColor: [15, 23, 42],
+            fontStyle: 'bold',
+            halign: 'center'
+          },
+          columnStyles: {
+            0: { cellWidth: 10, halign: 'center' },
+            1: { cellWidth: 20, halign: 'center' },
+            2: { cellWidth: 36 },
+            3: { cellWidth: 28 },
+            4: { cellWidth: 58 },
+            5: { cellWidth: 30, minCellHeight: 24, halign: 'center' }
+          },
+          didDrawCell: function(data) {
+            if (data.section === 'body' && data.column.index === 5) {
+              const reportItem = dateReports[data.row.index];
+              const imgData = reportItem ? photoMap[reportItem.id] : null;
+              if (imgData && imgData.startsWith('data:image/jpeg')) {
+                try {
+                  const imgW = 26;
+                  const imgH = 20;
+                  const x = data.cell.x + (data.cell.width - imgW) / 2;
+                  const y = data.cell.y + (data.cell.height - imgH) / 2;
+                  doc.addImage(imgData, 'JPEG', x, y, imgW, imgH);
+                } catch (e) {
+                  console.warn('Gagal menyisipkan foto ke PDF:', e);
+                }
+              }
+            }
+          },
+          didDrawPage: function(data) {
+            const pageHeight = doc.internal.pageSize.getHeight();
+            doc.setDrawColor(200, 200, 200);
+            doc.line(14, pageHeight - 14, 196, pageHeight - 14);
+
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'italic');
+            doc.setTextColor(80, 80, 80);
+            const footerText = `Laporan ini dibuat otomatis oleh admin sdc senkom banten system by_Yefry.ZA Jam ${jamCetak} || ${tglCetak}`;
+            doc.text(footerText, 14, pageHeight - 8);
+
+            const pageNumber = `Hal ${doc.internal.getNumberOfPages()}`;
+            doc.text(pageNumber, 196, pageHeight - 8, { align: 'right' });
+          },
+          margin: { bottom: 20 }
+        });
+
+        doc.save(`Laporan_Posko_SENKOM_Banten_${targetDateKey}.pdf`);
+
+        // Munculkan pilihan hapus data Firebase setelah PDF terunduh
+        pendingDeleteDateKey = targetDateKey;
+        document.getElementById('deleteConfirmText').innerHTML =
+          `PDF tanggal <strong>${tglLaporanPendek}</strong> (${dateReports.length} laporan) telah terunduh.<br/><br/>Apakah Anda ingin <strong>MENGHAPUS</strong> data teks & foto tanggal tersebut dari Firebase agar kapasitas database tetap ringan?`;
+        document.getElementById('deleteConfirmModal').style.display = 'flex';
+      } catch (err) {
+        console.error(err);
+        alert('❌ Terjadi kesalahan saat membuat PDF: ' + err.message);
+      } finally {
+        pdfBtn.disabled = false;
+        pdfBtn.textContent = origLabel;
+      }
+    }
+
+    window.executeDeleteDateData = async function() {
+      if (!pendingDeleteDateKey) return;
+      const btn = document.getElementById('btnConfirmDeleteData');
+      const targetKey = pendingDeleteDateKey;
+      btn.disabled = true;
+      btn.textContent = '⏳ Menghapus...';
+
+      try {
+        await Promise.all([
+          remove(ref(db, `laporan_mudik/${targetKey}`)),
+          remove(ref(db, `laporan_foto/${targetKey}`))
+        ]);
+
+        if (targetKey === currentDateKey) {
+          photoCache = {};
+          knownReportIds.clear();
+        }
+
+        const tglDihapus = getShortDateDDMMYYYY(parseDateKeyToSafeDate(targetKey));
+        closeDeleteModal();
+        alert(`🗑️ Data laporan & foto tanggal ${tglDihapus} berhasil dihapus dari Firebase.`);
+      } catch (err) {
+        console.error(err);
+        alert('❌ Gagal menghapus data: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🗑️ Ya, Hapus Data';
+      }
+    };
+
+    // ============================================================
+    // SISTEM BREAKING NEWS VIDEO REAL-TIME ANTAR POSKO INDUK
+    // ============================================================
+    let ytPlayerInstance = null;
+    let lastPlayedBreakingId = null;
+    const initialLoadTimestamp = Date.now();
+
+    function extractYouTubeId(url) {
+      if (!url) return null;
+      const regExp = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      const match = url.match(regExp);
+      return match ? match[1] : null;
+    }
+
+    function playBreakingSiren() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const notes = [880, 1174.66, 880, 1174.66, 1318.5];
+        notes.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.12);
+          gain.gain.setValueAtTime(0.3, now + i * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + i * 0.12);
+          osc.stop(now + i * 0.12 + 0.35);
+        });
+      } catch (e) {
+        console.warn('Siren blocked:', e);
+      }
+    }
+
+    window.openBreakingModal = function() {
+      document.getElementById('bnErrorMsg').textContent = '';
+      document.getElementById('bnPasswordInput').value = '';
+      document.getElementById('breakingControlModal').style.display = 'flex';
+      setTimeout(() => document.getElementById('bnTitleInput').focus(), 100);
+    };
+
+    window.closeBreakingModal = function() {
+      document.getElementById('breakingControlModal').style.display = 'none';
+    };
+
+    window.broadcastBreakingNews = async function() {
+      const title = document.getElementById('bnTitleInput').value.trim();
+      const videoUrl = document.getElementById('bnUrlInput').value.trim();
+      const pwd = document.getElementById('bnPasswordInput').value;
+      const errEl = document.getElementById('bnErrorMsg');
+
+      if (!title) {
+        errEl.textContent = '⚠️ Masukkan judul Breaking News terlebih dahulu.';
+        return;
+      }
+      if (!videoUrl) {
+        errEl.textContent = '⚠️ Tempelkan link video YouTube atau link .MP4.';
+        return;
+      }
+      if (pwd !== PDF_PASSWORD) {
+        errEl.textContent = '❌ Password admin salah!';
+        document.getElementById('bnPasswordInput').value = '';
+        return;
+      }
+
+      const btn = document.getElementById('btnStartBreaking');
+      btn.disabled = true;
+      btn.textContent = '⏳ Mengirim Sinyal...';
+
+      try {
+        const broadcastId = 'BN_' + Date.now();
+        await set(ref(db, 'breaking_news'), {
+          id: broadcastId,
+          active: true,
+          title: title,
+          videoUrl: videoUrl,
+          startedAt: Date.now()
+        });
+
+        document.getElementById('bnTitleInput').value = '';
+        document.getElementById('bnUrlInput').value = '';
+        closeBreakingModal();
+      } catch (err) {
+        console.error(err);
+        errEl.textContent = '❌ Gagal menyiarkan: ' + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 Tayangkan Sekarang';
+      }
+    };
+
+    window.stopGlobalBreakingNews = async function() {
+      const pwd = document.getElementById('bnPasswordInput').value;
+      const errEl = document.getElementById('bnErrorMsg');
+      if (pwd !== PDF_PASSWORD) {
+        errEl.textContent = '❌ Masukkan password admin untuk menghentikan siaran semua layar.';
+        return;
+      }
+      try {
+        await set(ref(db, 'breaking_news'), { active: false, stoppedAt: Date.now() });
+        closeBreakingModal();
+        closeBreakingNewsLocal();
+      } catch (err) {
+        errEl.textContent = '❌ Gagal menghentikan: ' + err.message;
+      }
+    };
+
+    window.closeBreakingNewsLocal = function() {
+      const screen = document.getElementById('breakingNewsScreen');
+      screen.classList.remove('active');
+
+      const directVideo = document.getElementById('bnDirectVideo');
+      directVideo.pause();
+      directVideo.removeAttribute('src');
+      directVideo.load();
+      directVideo.style.display = 'none';
+
+      if (ytPlayerInstance && typeof ytPlayerInstance.destroy === 'function') {
+        try { ytPlayerInstance.destroy(); } catch (e) {}
+        ytPlayerInstance = null;
+      }
+      const ytContainer = document.getElementById('bnYoutubeContainer');
+      ytContainer.innerHTML = '<div id="bnYoutubePlayer"></div>';
+      ytContainer.style.display = 'none';
+    };
+
+    function launchBreakingNewsOnScreen(data) {
+      // Hentikan Mars SENKOM jika sedang berbunyi agar suara tidak tabrakan
+      stopMars();
+      playBreakingSiren();
+
+      const screen = document.getElementById('breakingNewsScreen');
+      document.getElementById('bnDisplayTitle').textContent = data.title || 'BREAKING NEWS POSKO MUDIK 2027';
+      screen.classList.add('active');
+
+      const ytId = extractYouTubeId(data.videoUrl);
+      const ytContainer = document.getElementById('bnYoutubeContainer');
+      const directVideo = document.getElementById('bnDirectVideo');
+
+      if (ytId) {
+        // Mode YouTube: otomatis deteksi akhir durasi video (30s, 40s, dll)
+        directVideo.style.display = 'none';
+        ytContainer.style.display = 'block';
+        ytContainer.innerHTML = '<div id="bnYoutubePlayer"></div>';
+
+        const createYT = () => {
+          ytPlayerInstance = new window.YT.Player('bnYoutubePlayer', {
+            videoId: ytId,
+            playerVars: {
+              autoplay: 1,
+              controls: 1,
+              rel: 0,
+              modestbranding: 1,
+              playsinline: 1
+            },
+            events: {
+              onReady: (event) => {
+                event.target.playVideo();
+              },
+              onStateChange: (event) => {
+                // YT.PlayerState.ENDED === 0 -> Video selesai, otomatis kembali ke layar biasa
+                if (event.data === 0) {
+                  closeBreakingNewsLocal();
+                }
+              },
+              onError: () => {
+                setTimeout(() => closeBreakingNewsLocal(), 4000);
+              }
+            }
+          });
+        };
+
+        if (window.YT && window.YT.Player) {
+          createYT();
+        } else {
+          setTimeout(createYT, 1200);
+        }
+      } else {
+        // Mode Direct Video (.mp4 / .webm): otomatis kembali saat onended
+        ytContainer.style.display = 'none';
+        directVideo.style.display = 'block';
+        directVideo.src = data.videoUrl;
+        directVideo.play().catch(err => console.warn('Autoplay video:', err));
+
+        directVideo.onended = () => {
+          closeBreakingNewsLocal();
+        };
+        directVideo.onerror = () => {
+          setTimeout(() => closeBreakingNewsLocal(), 4000);
+        };
+      }
+    }
+
+    // Dengarkan sinyal Breaking News secara real-time di semua layar Posko Induk
+    onValue(ref(db, 'breaking_news'), (snapshot) => {
+      const data = snapshot.val();
+      if (!data || !data.active) {
+        closeBreakingNewsLocal();
+        return;
+      }
+
+      // Abaikan siaran lama yang sudah terlewat lebih dari 5 menit saat layar baru dibuka
+      const isFreshBroadcast = (Date.now() - (data.startedAt || 0)) < 5 * 60 * 1000;
+      if (isFreshBroadcast && data.id !== lastPlayedBreakingId) {
+        lastPlayedBreakingId = data.id;
+        launchBreakingNewsOnScreen(data);
+      }
+    });
+
+    listenToTodayReports(currentDateKey);
+  </script>
+</body>
+</html>
