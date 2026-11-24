@@ -2175,10 +2175,14 @@
           setTimeout(createYT, 1200);
         }
       } else {
-        // Mode Direct Video (.mp4 / .webm): otomatis kembali saat onended
+        
+     // Mode Direct Video (.mp4 / .webm): otomatis kembali saat onended
         ytContainer.style.display = 'none';
         directVideo.style.display = 'block';
-        directVideo.src = data.videoUrl;
+        
+        const pemisah = data.videoUrl.includes('?') ? '&' : '?';
+        directVideo.src = `${data.videoUrl}${pemisah}v=${data.startedAt || Date.now()}`;
+        
         directVideo.play().catch(err => console.warn('Autoplay video:', err));
 
         directVideo.onended = () => {
