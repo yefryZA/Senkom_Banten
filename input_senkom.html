@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>INPUT LAPORAN POSKO - SENKOM BANTEN 2027</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#090d16" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SENKOM BANTEN" />
+  <link rel="apple-touch-icon" href="logo_senkom.jpg" />
   <style>
     :root {
       --bg-dark: #090d16;
@@ -403,11 +410,101 @@
       cursor: not-allowed;
     }
 
+/* TOMBOL BREAKING NEWS MELAYANG PERMANEN DI BAWAH LAYAR HP */
 .hp-bn-launcher {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   max-width: 520px;
-  margin: 0 auto 24px auto;
-  padding: 0 1rem;
+  padding: 10px 1rem calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(9, 13, 22, 0) 0%, rgba(9, 13, 22, 0.96) 28%, #090d16 100%);
+  z-index: 900;
+}
+
+/* SPLASH SCREEN LOGO SENKOM PROVINSI BANTEN */
+#pwaSplashScreen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #131c31 0%, #090d16 100%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+#pwaSplashScreen.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.splash-logo-wrap {
+  width: 124px;
+  height: 124px;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 26px;
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.35);
+  margin-bottom: 1.35rem;
+  animation: splashZoom 0.6s ease-out;
+}
+.splash-logo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.splash-title {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 2px;
+}
+.splash-subtitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  letter-spacing: 2.5px;
+  margin-top: 4px;
+}
+.splash-tag {
+  margin-top: 1.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+@keyframes splashZoom {
+  from { transform: scale(0.82); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* BANNER INSTALL APLIKASI DI HP */
+#pwaInstallBanner {
+  display: none;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.btn-install-app {
+  background: var(--gold);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
     .btn-open-hp-bn {
@@ -558,10 +655,25 @@
       font-weight: 700;
       cursor: pointer;
     }
+    .container {
+  width: 100%;
+  max-width: 520px;
+  padding: 0 1rem 5.5rem;
+}
   </style>
 </head>
 <body>
 
+  <!-- SPLASH SCREEN PEMBUKA APLIKASI -->
+<div id="pwaSplashScreen">
+  <div class="splash-logo-wrap">
+    <img src="logo_senkom.jpg" alt="Logo SENKOM" />
+  </div>
+  <div class="splash-title">SENKOM MITRA POLRI</div>
+  <div class="splash-subtitle">PROVINSI BANTEN</div>
+  <div class="splash-tag">POSKO MUDIK LEBARAN 2027</div>
+</div>
+  
   <div class="container">
     <!-- HEADER TETAP DI ATAS SAAT SCROLL -->
     <div class="sticky-header-area">
@@ -587,6 +699,15 @@
         KIRIM LAPORAN KE POSKO UTAMA
       </button>
     </div>
+
+    <!-- TOMBOL INSTALL APLIKASI (OTOMATIS MUNCUL JIKA BELUM DI-INSTALL) -->
+<div id="pwaInstallBanner">
+  <div style="font-size:0.78rem; color:#e2e8f0; line-height:1.3;">
+    📲 <strong style="color:#fbbf24;">Pasang Aplikasi di HP</strong><br/>
+    Akses cepat tanpa buka browser
+  </div>
+  <button type="button" class="btn-install-app" id="btnInstallPwa">INSTALL APP</button>
+</div>
 
     <!-- DAFTAR LAPORAN TERKIRIM (HANYA MEMUAT TEKS RINGAN) -->
     <div class="history-section">
@@ -1068,6 +1189,49 @@ const ADMIN_BN_PWD = "SENKOM2027";
         </div>
       `).join('');
     });
+
+// 1. Tutup Splash Screen Logo SENKOM setelah 1.4 detik
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const splash = document.getElementById('pwaSplashScreen');
+        if (splash) splash.classList.add('hide');
+      }, 1400);
+    });
+
+    // 2. Daftarkan Service Worker agar memenuhi syarat Install PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch((err) => {
+        console.warn('SW gagal:', err);
+      });
+    }
+
+    // 3. Tangkap event Install Aplikasi di Android Chrome / Edge
+    let deferredPrompt;
+    const installBanner = document.getElementById('pwaInstallBanner');
+    const btnInstallPwa = document.getElementById('btnInstallPwa');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (installBanner) installBanner.style.display = 'flex';
+    });
+
+    if (btnInstallPwa) {
+      btnInstallPwa.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installBanner.style.display = 'none';
+        }
+        deferredPrompt = null;
+      });
+    }
+
+    window.addEventListener('appinstalled', () => {
+      if (installBanner) installBanner.style.display = 'none';
+      deferredPrompt = null;
+    });    
   </script>
 </body>
 </html>
