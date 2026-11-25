@@ -1,0 +1,25 @@
+{
+  "name": "POSKO MUDIK SENKOM - PROVINSI BANTEN",
+  "short_name": "SENKOM BANTEN",
+  "description": "Portal Laporan Posko Mudik Lebaran 2027 SENKOM Mitra Polri Provinsi Banten",
+  "start_url": "./input_senkom.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "logo_senkom.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "logo_senkom.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
