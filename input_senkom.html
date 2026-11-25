@@ -660,6 +660,47 @@
   max-width: 520px;
   padding: 0 1rem 5.5rem;
 }
+    /* PILIHAN DUA TOMBOL: KAMERA & GALERI */
+    .photo-choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .btn-photo-source {
+      background: var(--bg-input);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 0.8rem 0.5rem;
+      color: var(--text);
+      font-size: 0.86rem;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-photo-source:active {
+      transform: scale(0.97);
+    }
+    .btn-photo-source.cam {
+      border-color: rgba(245, 158, 11, 0.55);
+      color: var(--gold-light);
+    }
+    .btn-photo-source.gal {
+      border-color: rgba(56, 189, 248, 0.55);
+      color: #7dd3fc;
+    }
+    .photo-preview-frame {
+      background: var(--bg-input);
+      border: 1.5px dashed var(--border);
+      border-radius: 12px;
+      padding: 0.75rem;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -796,18 +837,36 @@
           <textarea id="laporan" rows="2" placeholder="Tuliskan situasi arus mudik, kejadian menonjol, atau bantuan pemudik..." required></textarea>
         </div>
 
-        <div class="form-group">
+      <div class="form-group">
           <label>5. Foto Dokumentasi Lapangan *</label>
           <div class="orientation-tip">
-            💡 <strong>Tips Kamera:</strong> Disarankan memotret posisi miring (<strong>Lanskap</strong>) agar memenuhi layar TV posko. Foto tegak (<strong>Potret</strong>) tetap didukung penuh tanpa terpotong.
+            💡 <strong>Tips Kamera:</strong> Disarankan posisi miring (<strong>Lanskap</strong>) agar memenuhi layar TV posko. Foto tegak (<strong>Potret</strong>) tetap didukung utuh.
           </div>
-          <div class="file-upload-box" onclick="document.getElementById('fotoInput').click()">
-            <div style="font-size: 1.5rem;">📷</div>
-            <div style="font-size: 0.9rem; font-weight: 700; color: var(--gold-light);">Ketuk untuk Ambil Foto / Pilih Galeri</div>
+
+          <!-- DUA TOMBOL TERPISAH: KAMERA LANGSUNG & ALBUM GALERI -->
+          <div class="photo-choice-grid">
+            <button type="button" class="btn-photo-source cam" onclick="document.getElementById('fotoCameraInput').click()">
+              <span style="font-size: 1.45rem;">📷</span>
+              <span>Ambil Kamera</span>
+            </button>
+            <button type="button" class="btn-photo-source gal" onclick="document.getElementById('fotoGalleryInput').click()">
+              <span style="font-size: 1.45rem;">🖼️</span>
+              <span>Album / Galeri</span>
+            </button>
+          </div>
+
+          <div class="photo-preview-frame" id="photoPreviewFrame">
+            <div id="photoEmptyHint" style="font-size: 0.8rem; color: var(--muted);">
+              Belum ada foto dipilih — pilih Kamera atau Galeri di atas
+            </div>
             <img id="photoPreview" alt="Preview Foto" />
             <div id="photoOrientationBadge"></div>
           </div>
-          <input type="file" id="fotoInput" accept="image/*" capture="environment" style="display: none;" required />
+
+          <!-- INPUT TERSEMBUNYI KHUSUS KAMERA -->
+          <input type="file" id="fotoCameraInput" accept="image/*" capture="environment" style="display: none;" />
+          <!-- INPUT TERSEMBUNYI KHUSUS GALERI / ALBUM FILE -->
+          <input type="file" id="fotoGalleryInput" accept="image/*" style="display: none;" />
         </div>
 
         <button type="submit" class="btn-submit" id="btnSubmit">🚀 KIRIM KE LAYAR UTAMA POSKO</button>
@@ -1045,7 +1104,7 @@ const ADMIN_BN_PWD = "SENKOM2027";
       document.getElementById('inputModal').classList.remove('open');
     };
 
-    document.getElementById('fotoInput').addEventListener('change', function(e) {
+function handlePhotoSelection(e) {
       const file = e.target.files[0];
       if (!file) return;
 
@@ -1075,6 +1134,9 @@ const ADMIN_BN_PWD = "SENKOM2027";
           compressedBase64 = canvas.toDataURL('image/jpeg', 0.68);
           const preview = document.getElementById('photoPreview');
           const badge = document.getElementById('photoOrientationBadge');
+          const emptyHint = document.getElementById('photoEmptyHint');
+
+          if (emptyHint) emptyHint.style.display = 'none';
           preview.src = compressedBase64;
           preview.style.display = 'inline-block';
           badge.style.display = 'block';
@@ -1085,7 +1147,11 @@ const ADMIN_BN_PWD = "SENKOM2027";
         img.src = event.target.result;
       };
       reader.readAsDataURL(file);
-    });
+    }
+
+    document.getElementById('fotoCameraInput').addEventListener('change', handlePhotoSelection);
+    document.getElementById('fotoGalleryInput').addEventListener('change', handlePhotoSelection);
+    
 
     document.getElementById('laporanForm').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -1128,10 +1194,13 @@ const ADMIN_BN_PWD = "SENKOM2027";
         updates[`laporan_foto/${dateKey}/${newReportKey}`] = photoPayload;
         await update(ref(db), updates);
 
-        document.getElementById('laporanForm').reset();
+       document.getElementById('laporanForm').reset();
         document.getElementById('photoPreview').style.display = 'none';
         document.getElementById('photoOrientationBadge').style.display = 'none';
+        const emptyHint = document.getElementById('photoEmptyHint');
+        if (emptyHint) emptyHint.style.display = 'block';
         compressedBase64 = "";
+        
         closeInputModal();
         alert('✅ Laporan berhasil terkirim dan langsung tampil di Layar Utama Posko!');
       } catch (err) {
