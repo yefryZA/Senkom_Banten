@@ -2,19 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" id="tvViewportMeta" content="width=device-width, initial-scale=1.0" />
-  <script>
-    (function adjustForAndroidTV() {
-      const isLandscape = window.innerWidth > window.innerHeight;
-      const isTVBrowser = /TV|Android.*TV|AFT|BRAVIA|SmartTV|Web0S|Tizen|TV Bro/i.test(navigator.userAgent)
-        || (isLandscape && window.innerWidth <= 1150);
-
-      if (isTVBrowser) {
-        const meta = document.getElementById('tvViewportMeta');
-        meta.setAttribute('content', 'width=1366, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-      }
-    })();
-  </script>
+  <meta name="viewport" content="width=1366" />
   <title>POSKO MUDIK LEBARAN 2027 - SENKOM MITRA POLRI BANTEN</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -36,15 +24,30 @@
 
     * {
       box-sizing: border-box;
+      min-width: 0;
+      min-height: 0;
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
+    html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background-color: var(--bg-dark);
       color: var(--text-main);
-      height: 100vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -77,7 +80,12 @@
     /* WELCOME SCREEN OVERLAY */
     #welcomeScreen {
       position: fixed;
-      inset: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: radial-gradient(circle at center, #1e293b 0%, #070b14 100%);
       z-index: 9999;
       display: flex;
@@ -89,7 +97,7 @@
     }
 
     .welcome-box {
-      background: rgba(15, 23, 42, 0.92);
+      background: rgba(15, 23, 42, 0.95);
       border: 2px solid var(--gold);
       border-radius: 20px;
       padding: 2.75rem 3.5rem;
@@ -173,6 +181,7 @@
       display: flex;
       align-items: center;
       gap: 1.25rem;
+      flex-shrink: 0;
     }
 
     .clock-box {
@@ -217,6 +226,7 @@
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .btn-mini:hover {
@@ -251,12 +261,12 @@
       border: 1px solid rgba(245, 158, 11, 0.35);
     }
 
-    /* MAIN SPLIT LAYOUT: 75% FOTO SPOTLIGHT | 25% LIVE FEED */
+    /* MAIN SPLIT LAYOUT: 75% FOTO SPOTLIGHT | 25% LIVE FEED (KOMPATIBEL SEMUA TV) */
     main {
       flex: 1;
       min-height: 0;
-      display: grid;
-      grid-template-columns: 7.5fr 2.5fr;
+      display: flex;
+      flex-direction: row;
       gap: 1rem;
       padding: 1rem 1.5rem;
       overflow: hidden;
@@ -264,6 +274,8 @@
 
     /* LEFT PANEL: PHOTO-HERO SPOTLIGHT */
     .spotlight-panel {
+      flex: 3;
+      width: 75%;
       background: var(--bg-panel);
       border: 2px solid var(--border-color);
       border-radius: 16px;
@@ -345,7 +357,10 @@
 
     .photo-bg-blur {
       position: absolute;
-      inset: -25px;
+      top: -25px;
+      right: -25px;
+      bottom: -25px;
+      left: -25px;
       width: calc(100% + 50px);
       height: calc(100% + 50px);
       object-fit: cover;
@@ -378,8 +393,7 @@
     }
 
     .posko-pill {
-      background: rgba(15, 23, 42, 0.86);
-      backdrop-filter: blur(8px);
+      background: rgba(15, 23, 42, 0.9);
       border: 1px solid rgba(245, 158, 11, 0.45);
       border-left: 4px solid var(--gold);
       padding: 0.35rem 0.75rem;
@@ -409,8 +423,7 @@
     }
 
     .info-chip {
-      background: rgba(15, 23, 42, 0.86);
-      backdrop-filter: blur(8px);
+      background: rgba(15, 23, 42, 0.9);
       border: 1px solid var(--border-color);
       padding: 0.35rem 0.75rem;
       border-radius: 8px;
@@ -428,12 +441,11 @@
       text-transform: uppercase;
       letter-spacing: 0.4px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.55);
-      backdrop-filter: blur(8px);
     }
 
-    .lalin-lancar { background: rgba(6, 78, 59, 0.92); color: #34d399; border: 1.5px solid #10b981; }
-    .lalin-padat { background: rgba(120, 53, 15, 0.92); color: #fbbf24; border: 1.5px solid #f59e0b; }
-    .lalin-macet { background: rgba(127, 29, 29, 0.94); color: #fca5a5; border: 1.5px solid #ef4444; }
+    .lalin-lancar { background: rgba(6, 78, 59, 0.95); color: #34d399; border: 1.5px solid #10b981; }
+    .lalin-padat { background: rgba(120, 53, 15, 0.95); color: #fbbf24; border: 1.5px solid #f59e0b; }
+    .lalin-macet { background: rgba(127, 29, 29, 0.95); color: #fca5a5; border: 1.5px solid #ef4444; }
 
     /* KOTAK URAIAN BAWAH DENGAN TINGGI TERKUNCI & AUTO-SCROLL */
     .caption-bar {
@@ -505,7 +517,7 @@
 
     .caption-reporter {
       text-align: right;
-      background: rgba(30, 41, 59, 0.78);
+      background: rgba(30, 41, 59, 0.85);
       border: 1px solid var(--border-color);
       padding: 0.5rem 0.95rem;
       border-radius: 10px;
@@ -556,6 +568,8 @@
 
     /* RIGHT PANEL: LIVE LIST BANTEN */
     .feed-panel {
+      flex: 1;
+      width: 25%;
       background: var(--bg-panel);
       border: 2px solid var(--border-color);
       border-radius: 16px;
@@ -733,12 +747,16 @@
       letter-spacing: 1px;
     }
 
-    /* MODAL PASSWORD PDF */
-    #pdfPasswordModal {
+    /* MODAL PASSWORD PDF & MODAL LAINNYA */
+    #pdfPasswordModal, #breakingControlModal, #pdfModal, #confirmDeleteModal {
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(5px);
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.88);
       z-index: 9500;
       display: none;
       align-items: center;
@@ -843,7 +861,12 @@
 
     #breakingNewsScreen {
       position: fixed;
-      inset: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: #000;
       z-index: 8500;
       display: none;
@@ -870,7 +893,10 @@
       overflow: hidden;
     }
 
-    #bnYoutubePlayer, #bnDirectVideo {
+    #bnYoutubePlayer, #bnYoutubeContainer, #bnDirectVideo {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       border: none;
@@ -1015,60 +1041,6 @@
     @keyframes eq {
       from { height: 5px; }
       to { height: 20px; }
-    }
-
-    /* ============================================================ */
-    /* KOMPATIBILITAS LAYAR TV ANDROID (TV BRO & TV PERAMBAH WEB)   */
-    /* ============================================================ */
-    html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden !important;
-      -webkit-text-size-adjust: 100%;
-    }
-
-    /* Mencegah kotak foto & teks melar keluar batas di WebView TV lama */
-    * {
-      min-width: 0;
-      min-height: 0;
-      box-sizing: border-box;
-    }
-
-    /* Perbaikan posisi layar penuh Breaking News untuk WebView TV tanpa inset:0 */
-    #breakingNewsScreen {
-      position: fixed !important;
-      top: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-    }
-
-    .bn-video-wrapper {
-      position: relative !important;
-      width: 100% !important;
-      height: 100% !important;
-    }
-
-    #bnYoutubeContainer, #bnDirectVideo {
-      position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-    }
-
-    /* Matikan efek blur berat yang sering bikin layar TV Android patah-patah */
-    #breakingControlModal, #pdfModal, #confirmDeleteModal {
-      top: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
     }
   </style>
 </head>
