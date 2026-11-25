@@ -2,7 +2,19 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" id="tvViewportMeta" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function adjustForAndroidTV() {
+      const isLandscape = window.innerWidth > window.innerHeight;
+      const isTVBrowser = /TV|Android.*TV|AFT|BRAVIA|SmartTV|Web0S|Tizen|TV Bro/i.test(navigator.userAgent)
+        || (isLandscape && window.innerWidth <= 1150);
+
+      if (isTVBrowser) {
+        const meta = document.getElementById('tvViewportMeta');
+        meta.setAttribute('content', 'width=1366, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+      }
+    })();
+  </script>
   <title>POSKO MUDIK LEBARAN 2027 - SENKOM MITRA POLRI BANTEN</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -1003,6 +1015,60 @@
     @keyframes eq {
       from { height: 5px; }
       to { height: 20px; }
+    }
+
+    /* ============================================================ */
+    /* KOMPATIBILITAS LAYAR TV ANDROID (TV BRO & TV PERAMBAH WEB)   */
+    /* ============================================================ */
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden !important;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* Mencegah kotak foto & teks melar keluar batas di WebView TV lama */
+    * {
+      min-width: 0;
+      min-height: 0;
+      box-sizing: border-box;
+    }
+
+    /* Perbaikan posisi layar penuh Breaking News untuk WebView TV tanpa inset:0 */
+    #breakingNewsScreen {
+      position: fixed !important;
+      top: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .bn-video-wrapper {
+      position: relative !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    #bnYoutubeContainer, #bnDirectVideo {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Matikan efek blur berat yang sering bikin layar TV Android patah-patah */
+    #breakingControlModal, #pdfModal, #confirmDeleteModal {
+      top: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
   </style>
 </head>
@@ -2175,14 +2241,10 @@
           setTimeout(createYT, 1200);
         }
       } else {
-        
-     // Mode Direct Video (.mp4 / .webm): otomatis kembali saat onended
+        // Mode Direct Video (.mp4 / .webm): otomatis kembali saat onended
         ytContainer.style.display = 'none';
         directVideo.style.display = 'block';
-        
-        const pemisah = data.videoUrl.includes('?') ? '&' : '?';
-        directVideo.src = `${data.videoUrl}${pemisah}v=${data.startedAt || Date.now()}`;
-        
+        directVideo.src = data.videoUrl;
         directVideo.play().catch(err => console.warn('Autoplay video:', err));
 
         directVideo.onended = () => {
